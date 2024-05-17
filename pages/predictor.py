@@ -5,14 +5,14 @@ from msrest.authentication import ApiKeyCredentials
 import requests
 
 # Replace with your endpoint and prediction key
-ENDPOINT = "https://mammoscanpro.cognitiveservices.azure.com/"
-PREDICTION_KEY = "ebde9caa48dd4a73b40ffb62864872d1"
+ENDPOINT = st.secrets["ENDPOINT"]
+PREDICTION_KEY = st.secrets["PREDICTION_KEY"]
 
 # Create a prediction client
 credentials = ApiKeyCredentials(in_headers={"Prediction-key": PREDICTION_KEY})
 predictor = CustomVisionPredictionClient(ENDPOINT, credentials)
 
-st.set_page_config(page_title="MammoScan Pro")
+st.set_page_config(page_title="OncoClear")
 
 bcauses = """
 The exact causes of benign, breast lumps, while scary, often aren't cancerous. Common causes include hormonal shifts like periods, pregnancy, or menopause, as well as tissue changes, infections, or injury scars. Certain medications and even excess caffeine might play a role. Remember, men can also get breast lumps due to hormone imbalances. If you notice a lump, don't panic, but consult a doctor for a proper diagnosis and peace of mind.
@@ -37,7 +37,7 @@ st.markdown(
                 background-repeat: no-repeat;                
             }
             [data-testid="stSidebarNav"]::before {
-                content: "MammoScan Pro";
+                content: "OncoClear";
                 margin-left: 20px;
                 margin-top: 20px;
 
@@ -49,7 +49,7 @@ st.markdown(
         """,
     unsafe_allow_html=True,
 )
-st.title("MammoScan Pro")
+st.title("OncoClear")
 st.text(
     "Upload an image of a close up of a cancerous ultrasound scan and we will tell you what type it is."
 )
@@ -67,27 +67,28 @@ image = st.file_uploader(
 
 if image is not None:
     disp = False
-    
+
     with image:
         st.image(image, caption="Your Ultrasound Scan", width=350)
         image_data = image.read()
-        results = predictor.classify_image("26b113fb-9f57-4484-be50-33144495cd7e", "Iteration1", image_data)
+        results = predictor.classify_image(
+            "26b113fb-9f57-4484-be50-33144495cd7e", "Iteration1", image_data)
     disp = True
-    
+
     c = st.image("loader.gif")
     time.sleep(3)
     c.empty()
     # Process and display the results
     if results.predictions:
         st.subheader("Prediction Results:")
-        name="unknown"
-        predict=0
+        name = "unknown"
+        predict = 0
         for prediction in results.predictions:
             if prediction.probability > predict and prediction.probability > 0.5:
                 predict = prediction.probability
                 name = prediction.tag_name
 
-    if name!="unknown":
+    if name != "unknown":
         st.text(f"Detected {name} with high confidence")
         if name == "benign":
             st.write(
@@ -146,4 +147,3 @@ if image is not None:
 
     else:
         st.text("Feel safe! No breast cancer detected")
-    

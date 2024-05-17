@@ -1,7 +1,7 @@
 import streamlit as st
 
 from streamlit_extras.switch_page_button import switch_page
-st.set_page_config(page_title="MammoScan Pro", page_icon="💊", layout="wide")
+st.set_page_config(page_title="OncoClear", page_icon="💊", layout="wide")
 st.markdown(
     """
         <style>
@@ -9,7 +9,7 @@ st.markdown(
                 background-repeat: no-repeat;                
             }
             [data-testid="stSidebarNav"]::before {
-                content: "MammoScan Pro";
+                content: "OncoClear";
                 margin-left: 20px;
                 margin-top: 20px;
 
@@ -22,7 +22,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.title("Welcome to MammoScan Pro")
+st.title("Welcome to OncoClear")
 
 st.write(
     "This project is made with the goal to help people identify types of Breast Cancer by Slowing or stopping the growth of cancer and by preventing a return of cancer."
@@ -70,7 +70,8 @@ About 80% of breast cancer cases are invasive. Malignant tumors can spread cance
 st.image("images/Malignant.png", caption="Malignant", width=350)
 
 st.header("Progression of Breast Cancer")
-st.image("images/progression.png", caption="Progession of Breast Cancer", width=350)
+st.image("images/progression.png",
+         caption="Progession of Breast Cancer", width=350)
 
 
 st.header("Model")
